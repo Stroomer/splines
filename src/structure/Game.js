@@ -10,6 +10,7 @@ import {
   KEY_RIGHT,
   KEY_X,
   KEY_Y,
+  KEY_Z,
 } from '../helpers/consts.js';
 
 class Game {
@@ -45,28 +46,20 @@ class Game {
   }
 
   update() {
-    const keyPressed = this.keyboardInput.getKey;
-    if (Boolean(keyPressed)) {
-      switch (keyPressed) {
-        case KEY_DOWN:
-          console.log('DOWN');
-          break;
-        case KEY_UP:
-          console.log('UP');
-          break;
-        case KEY_LEFT:
-          console.log('LEFT');
-          break;
-        case KEY_RIGHT:
-          console.log('RIGHT');
-          break;
-        case KEY_X:
-          console.log('X');
-          break;
-        case KEY_Y:
-          console.log('Y');
-          break;
-      }
+    if (this.keyboardInput.isReleased(KEY_X)) {
+      this.path.setSelectedPoint(1);
+      console.log('increment');
+    }
+
+    if (this.keyboardInput.isReleased(KEY_Z)) {
+      this.path.setSelectedPoint(-1);
+      console.log('decrement');
+    }
+
+    if (this.keyboardInput.isPressed(KEY_LEFT)) {
+      console.log('left');
+
+      //this.path.points[this.path.selectedPoint].x -= 30.0;
     }
   }
 

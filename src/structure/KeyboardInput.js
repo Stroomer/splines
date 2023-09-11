@@ -5,6 +5,7 @@ import {
   KEY_RIGHT,
   KEY_X,
   KEY_Y,
+  KEY_Z,
 } from '../helpers/consts';
 
 class KeyboardInput {
@@ -20,22 +21,35 @@ class KeyboardInput {
       d: KEY_RIGHT,
       x: KEY_X,
       y: KEY_Y,
+      z: KEY_Z,
+      X: KEY_X,
+      Y: KEY_Y,
+      Z: KEY_Z,
+      [KEY_LEFT]: KEY_LEFT,
+      [KEY_RIGHT]: KEY_RIGHT,
+      [KEY_UP]: KEY_UP,
+      [KEY_DOWN]: KEY_DOWN,
     };
 
-    this.currentKeysPressed = [];
+    this.keysPressed = [];
+    this.keysReleased = [];
 
     this.keyDownHandler = (e) => {
       const key = this.keys[e.key];
-      if (key && this.currentKeysPressed.indexOf(key) === -1) {
-        this.currentKeysPressed.unshift(key);
+
+      //console.log(`key down: ${key}`);
+
+      if (key && this.keysPressed.indexOf(key) === -1) {
+        this.keysPressed.unshift(key);
       }
     };
 
     this.keyUpHandler = (e) => {
       const key = this.keys[e.key];
-      const index = this.currentKeysPressed.indexOf(key);
-      if (index > -1) {
-        this.currentKeysPressed.splice(index, 1);
+      const index = this.keysPressed.indexOf(key);
+      if (key && index > -1) {
+        this.keysPressed.splice(index, 1);
+        this.keysReleased.unshift(key);
       }
     };
 
@@ -43,8 +57,19 @@ class KeyboardInput {
     document.addEventListener('keyup', this.keyUpHandler);
   }
 
-  get getKey() {
-    return this.currentKeysPressed[0];
+  isPressed(k) {
+    const key = this.keys[k];
+    return Boolean(key && this.keysPressed.indexOf(key) > -1);
+  }
+
+  isReleased(k) {
+    const key = this.keys[k];
+    const index = this.keysReleased.indexOf(key);
+    const released = Boolean(key && index > -1);
+    if (released) {
+      this.keysReleased.splice(index, 1);
+    }
+    return released;
   }
 
   unbind() {
