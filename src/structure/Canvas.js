@@ -31,6 +31,13 @@ class Canvas {
     this.context.fillStyle = color;
     this.context.fillRect(x - width / 2, y - height / 2, width, height);
   }
+
+  drawPixel(props) {
+    const { x, y } = props;
+    const color = '#fff';
+    this.context.fillStyle = color;
+    this.context.fillRect(x, y, 1, 1);
+  }
 }
 
 export default Canvas;

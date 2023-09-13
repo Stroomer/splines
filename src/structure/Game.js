@@ -25,8 +25,14 @@ class Game {
     this.path = new Spline({
       points: [
         new Point2D({ x: 10, y: 41 }),
+        new Point2D({ x: 20, y: 41 }),
+        new Point2D({ x: 30, y: 41 }),
         new Point2D({ x: 40, y: 41 }),
+        new Point2D({ x: 50, y: 41 }),
+        new Point2D({ x: 60, y: 41 }),
         new Point2D({ x: 70, y: 41 }),
+        new Point2D({ x: 80, y: 41 }),
+        new Point2D({ x: 90, y: 41 }),
         new Point2D({ x: 100, y: 41 }),
       ],
       canvas: this.canvas,
@@ -75,10 +81,12 @@ class Game {
     this.canvas.clear();
 
     // Draw spline
-    for (let t = 0.0; t < 1.0; t += 0.05) {
-      const pos = this.path.getSplinePoint(t);
+    const points = parseFloat(this.path.points.length);
+    for (let t = parseFloat(0.0); t < points; t += 0.005) {
+      const pos = this.path.getSplinePoint(t, true);
+
       // draw some pixels here??
-      ////////this.draw(x, y);
+      this.canvas.drawPixel({ x: pos.tx, y: pos.ty });
     }
 
     // Draw control-points
