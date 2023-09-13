@@ -36,9 +36,6 @@ class KeyboardInput {
 
     this.keyDownHandler = (e) => {
       const key = this.keys[e.key];
-
-      //console.log(`key down: ${key}`);
-
       if (key && this.keysPressed.indexOf(key) === -1) {
         this.keysPressed.unshift(key);
       }

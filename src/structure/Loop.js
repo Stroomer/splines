@@ -18,7 +18,7 @@ class Loop {
       }
       let delta = (timestampMs - previousMs) / 1000;
       while (delta >= step) {
-        this.onStep();
+        this.onStep(step);
         delta -= step;
       }
       previousMs = timestampMs - delta * 1000;

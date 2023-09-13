@@ -18,11 +18,18 @@ class Canvas {
     this.context.clearRect(0, 0, this.width, this.height);
   }
 
-  drawCircle(x, y, radius, color) {
+  drawCircle(props) {
+    const { x, y, radius, color } = props;
     this.context.beginPath();
     this.context.arc(x, y, radius, 0, 2 * Math.PI, false);
     this.context.fillStyle = color;
     this.context.fill();
+  }
+
+  drawRect(props) {
+    const { x, y, width, height, color } = props;
+    this.context.fillStyle = color;
+    this.context.fillRect(x - width / 2, y - height / 2, width, height);
   }
 }
 

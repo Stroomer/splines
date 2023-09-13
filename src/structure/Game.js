@@ -35,38 +35,56 @@ class Game {
 
     this.keyboardInput = new KeyboardInput();
 
-    this.loop = new Loop(() => {
-      this.tick();
+    this.loop = new Loop((dt) => {
+      this.tick(dt);
     });
   }
 
-  tick() {
-    this.update();
+  tick(dt) {
+    this.update(dt);
     this.draw();
   }
 
-  update() {
+  update(dt) {
     if (this.keyboardInput.isReleased(KEY_X)) {
       this.path.setSelectedPoint(1);
-      console.log('increment');
     }
 
     if (this.keyboardInput.isReleased(KEY_Z)) {
       this.path.setSelectedPoint(-1);
-      console.log('decrement');
     }
 
     if (this.keyboardInput.isPressed(KEY_LEFT)) {
-      console.log('left');
+      this.path.points[this.path.selectedPoint].x -= 30.0 * dt;
+    }
 
-      //this.path.points[this.path.selectedPoint].x -= 30.0;
+    if (this.keyboardInput.isPressed(KEY_RIGHT)) {
+      this.path.points[this.path.selectedPoint].x += 30.0 * dt;
+    }
+
+    if (this.keyboardInput.isPressed(KEY_UP)) {
+      this.path.points[this.path.selectedPoint].y -= 30.0 * dt;
+    }
+
+    if (this.keyboardInput.isPressed(KEY_DOWN)) {
+      this.path.points[this.path.selectedPoint].y += 30.0 * dt;
     }
   }
 
   draw() {
     this.canvas.clear();
 
-    this.path.draw();
+    // Draw spline
+    for (let t = 0.0; t < 1.0; t += 0.05) {
+      const pos = this.path.getSplinePoint(t);
+      // draw some pixels here??
+      ////////this.draw(x, y);
+    }
+
+    // Draw control-points
+    this.path.drawPoints();
+    // Draw active control-point
+    this.path.drawPoint();
   }
 }
 

@@ -4,54 +4,90 @@ class Spline {
     this.context = props.context;
     this.points = props.points || [];
     this.selectedPoint = 0;
+    this.controlPointSize = 10;
+    this.controlPointColorDefault = '#f00';
+    this.controlPointColorSelected = '#ff0';
   }
 
   setSelectedPoint(dir) {
-    this.selectedPoint += dir;
     switch (dir) {
       case 1:
-        if (this.selectedPoint >= this.points.length) {
+        this.selectedPoint++;
+        if (this.selectedPoint > this.points.length - 1) {
           this.selectedPoint = 0;
         }
         break;
       case -1:
+        this.selectedPoint--;
         if (this.selectedPoint < 0) {
           this.selectedPoint = this.points.length - 1;
         }
         break;
       default:
-        throw new Error("Invalid parameter 'dir'");
-    }
-    console.log(dir, this.selectedPoint, this.points.length);
-  }
-
-  incrementSelectedPoint() {
-    this.selectedPoint++;
-    if (this.selectedPoint >= this.points.length) {
-      this.selectedPoint = 0;
+        throw new Error('Invalid parameter');
     }
   }
 
-  decrementSelectedPoint() {
-    this.selectedPoint--;
-    if (this.selectedPoint < 0) {
-      this.selectedPoint = this.points.length - 1;
-    }
+  getSplinePoint(t) {
+    // const { x, y } = this.points[this.selectedPoint];
+    // return { x, y };
+    //let p0, p1, p2, p3; // 4 points of the curve
+    const p1 = parseInt(t) + 1;
+    const p2 = p1 + 1;
+    const p3 = p2 + 1;
+    const p0 = p1 - 1;
+
+    const tt = parseFloat(t * t);
+    const ttt = parseFloat(tt * t);
+
+    const q1 = parseFloat(-ttt + 2.0 * tt - t);
+    const q2 = parseFloat(3.0 * ttt - 5.0 * tt + 2.0);
+    const q3 = parseFloat(-3.0 * ttt + 4.0 * tt + t);
+    const q4 = parseFloat(ttt - tt);
+
+    const tx = parseFloat(
+      0.5 *
+        (this.points[p0].x * q1 +
+          this.points[p1].x * q2 +
+          this.points[p2].x * q3 +
+          this.points[p3].x * q4)
+    );
+
+    const ty = parseFloat(
+      0.5 *
+        (this.points[p0].y * q1 +
+          this.points[p1].y * q2 +
+          this.points[p2].y * q3 +
+          this.points[p3].y * q4)
+    );
+
+    return { tx, ty };
   }
 
   update() {}
 
-  draw() {
-    const pRadius = 10;
-    const pColor = '#f00';
-    const pCount = this.points.length;
-    for (let i = 0; i < pCount; i++) {
+  drawPoints() {
+    const count = this.points.length;
+    const width = this.controlPointSize;
+    const height = this.controlPointSize;
+    const color = this.controlPointColorDefault;
+    for (let i = 0; i < count; i++) {
       const { x, y } = this.points[i];
-
-      this.canvas.drawCircle(x, y, pRadius, pColor);
-
-      // console.log(point.x, point.y);
+      this.drawPoint({ x, y, width, height, color });
     }
+  }
+
+  drawPoint(props = null) {
+    if (props === null) {
+      props = {
+        x: this.points[this.selectedPoint].x,
+        y: this.points[this.selectedPoint].y,
+        width: this.controlPointSize,
+        height: this.controlPointSize,
+        color: this.controlPointColorSelected,
+      };
+    }
+    this.canvas.drawRect(props);
   }
 }
 

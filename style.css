@@ -14,3 +14,7 @@ body {
   padding: 2rem;
   text-align: center;
 }
+
+canvas {
+  image-rendering: pixelated;
+}
