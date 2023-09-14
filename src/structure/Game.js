@@ -11,6 +11,8 @@ import {
   KEY_X,
   KEY_Y,
   KEY_Z,
+  KEY_A,
+  KEY_S,
 } from '../helpers/consts.js';
 
 class Game {
@@ -75,6 +77,22 @@ class Game {
     if (this.keyboardInput.isPressed(KEY_DOWN)) {
       this.path.points[this.path.selectedPoint].y += 30.0 * dt;
     }
+
+    if (this.keyboardInput.isPressed(KEY_A)) {
+      this.path.marker -= 5.0 * dt;
+    }
+
+    if (this.keyboardInput.isPressed(KEY_S)) {
+      this.path.marker += 5.0 * dt;
+    }
+
+    if (this.path.marker >= parseFloat(this.path.points.length)) {
+      this.path.marker -= parseFloat(this.path.points.length);
+    }
+
+    if (this.path.marker < parseFloat(0.0)) {
+      this.path.marker += parseFloat(this.path.points.length);
+    }
   }
 
   draw() {
@@ -84,15 +102,33 @@ class Game {
     const points = parseFloat(this.path.points.length);
     for (let t = parseFloat(0.0); t < points; t += 0.005) {
       const pos = this.path.getSplinePoint(t, true);
-
-      // draw some pixels here??
-      this.canvas.drawPixel({ x: pos.tx, y: pos.ty });
+      const x = pos.tx;
+      const y = pos.ty;
+      this.canvas.drawPixel({ x, y });
     }
 
     // Draw control-points
     this.path.drawPoints();
     // Draw active control-point
     this.path.drawPoint();
+    // Draw agent
+    const p1 = this.path.getSplinePoint(parseFloat(this.path.marker), true);
+    const g1 = this.path.getSplineGradient(parseFloat(this.path.marker), true);
+
+    console.log(p1);
+
+    const r = parseFloat(Math.atan2(-g1.y, g1.x));
+
+    const x1 = 5.0 * Math.sin(r) + p1.tx;
+    const y1 = 5.0 * Math.cos(r) + p1.ty;
+    const x2 = -5.0 * Math.sin(r) + p1.tx;
+    const y2 = -5.0 * Math.cos(r) + p1.ty;
+
+    const color = 'blue';
+
+    this.canvas.drawLine({ x1, y1, x2, y2, color });
+
+    //this.canvas.drawLine({ x1: 100, y1: 100, x2: 200, y2: 200, color: '#00f' });
   }
 }
 

@@ -38,6 +38,16 @@ class Canvas {
     this.context.fillStyle = color;
     this.context.fillRect(x, y, 1, 1);
   }
+
+  drawLine(props) {
+    const { x1, y1, x2, y2, color } = props;
+    this.context.strokeStyle = color;
+    this.context.strokeWidth = 10;
+    this.context.beginPath();
+    this.context.moveTo(x1, y1);
+    this.context.lineTo(x2, y2);
+    this.context.stroke();
+  }
 }
 
 export default Canvas;
