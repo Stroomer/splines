@@ -22,7 +22,7 @@ class Canvas {
   drawCircle(props) {
     const { x, y, radius, color } = props;
     this.context.beginPath();
-    this.context.arc(x, y, radius, 0, 2 * Math.PI, false);
+    this.context.arc(x | 0, y | 0, radius, 0, 2 * Math.PI, false);
     this.context.fillStyle = color;
     this.context.fill();
   }
@@ -30,24 +30,27 @@ class Canvas {
   drawRect(props) {
     const { x, y, width, height, color } = props;
     this.context.fillStyle = color;
-    this.context.fillRect(x - width / 2, y - height / 2, width, height);
+    this.context.fillRect(
+      (x - width / 2) | 0,
+      (y - height / 2) | 0,
+      width,
+      height
+    );
   }
 
   drawPixel(props) {
-    const { x, y } = props;
-    const color = '#fff';
+    const { x, y, color } = props;
     this.context.fillStyle = color;
-    this.context.fillRect(x, y, 1, 1);
+    this.context.fillRect(x | 0, y | 0, 1, 1);
   }
 
   drawLine(props) {
     const { x1, y1, x2, y2, color } = props;
     this.context.strokeStyle = color;
-    //this.context.strokeWidth = 10;
     this.context.lineWidth = 5;
     this.context.beginPath();
-    this.context.moveTo(x1, y1);
-    this.context.lineTo(x2, y2);
+    this.context.moveTo(x1 | 0, y1 | 0);
+    this.context.lineTo(x2 | 0, y2 | 0);
     this.context.stroke();
   }
 }

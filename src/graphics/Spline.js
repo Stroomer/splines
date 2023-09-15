@@ -7,7 +7,7 @@ class Spline {
     this.controlPointSize = 10;
     this.controlPointColorDefault = '#f00';
     this.controlPointColorSelected = '#ff0';
-    this.marker = parseFloat(0.0);
+    this.marker = 0.0;
   }
 
   setSelectedPoint(dir) {
