@@ -42,7 +42,8 @@ class Canvas {
   drawLine(props) {
     const { x1, y1, x2, y2, color } = props;
     this.context.strokeStyle = color;
-    this.context.strokeWidth = 100;
+    //this.context.strokeWidth = 10;
+    this.context.lineWidth = 5;
     this.context.beginPath();
     this.context.moveTo(x1, y1);
     this.context.lineTo(x2, y2);

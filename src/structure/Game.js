@@ -115,6 +115,8 @@ class Game {
 
     const r = parseFloat(Math.atan2(-g1.y, g1.x));
 
+    console.log(r);
+
     const x1 = 5.0 * Math.sin(r) + p1.x;
     const y1 = 5.0 * Math.cos(r) + p1.y;
     const x2 = -5.0 * Math.sin(r) + p1.x;
