@@ -19,8 +19,8 @@ class Game {
   constructor() {
     this.canvas = new Canvas({
       parent: document.getElementById('app'),
-      width: 500,
-      height: 500,
+      width: 320,
+      height: 180,
       bgcolor: '#000',
     });
 

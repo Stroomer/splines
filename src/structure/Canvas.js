@@ -11,6 +11,7 @@ class Canvas {
     this.width = props.width;
     this.height = props.height;
     this.context = this.canvas.getContext('2d');
+    this.context.imageSmoothingEnabled = false;
     props.parent.appendChild(this.canvas);
   }
 
