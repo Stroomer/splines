@@ -29,23 +29,22 @@ class Spline {
     }
   }
 
-  getSplinePoint(t, looped = false) {
+  getSplinePoint(_t, looped = false) {
     let p0, p1, p2, p3;
 
     if (!looped) {
-      p1 = parseInt(t) + 1;
+      p1 = parseInt(_t) + 1;
       p2 = p1 + 1;
       p3 = p2 + 1;
       p0 = p1 - 1;
     } else {
-      p1 = parseInt(t);
+      p1 = parseInt(_t);
       p2 = (p1 + 1) % this.points.length;
       p3 = (p2 + 1) % this.points.length;
       p0 = p1 >= 1 ? p1 - 1 : this.points.length - 1;
     }
 
-    t = t - parseInt(t);
-
+    const t = parseFloat(_t) - parseInt(_t);
     const tt = parseFloat(t * t);
     const ttt = parseFloat(tt * t);
 
@@ -54,7 +53,7 @@ class Spline {
     const q3 = parseFloat(-3.0 * ttt + 4.0 * tt + t);
     const q4 = parseFloat(ttt - tt);
 
-    const tx = parseFloat(
+    const x = parseFloat(
       0.5 *
         (this.points[p0].x * q1 +
           this.points[p1].x * q2 +
@@ -62,7 +61,7 @@ class Spline {
           this.points[p3].x * q4)
     );
 
-    const ty = parseFloat(
+    const y = parseFloat(
       0.5 *
         (this.points[p0].y * q1 +
           this.points[p1].y * q2 +
@@ -70,26 +69,25 @@ class Spline {
           this.points[p3].y * q4)
     );
 
-    return { tx, ty };
+    return { x, y };
   }
 
-  getSplineGradient(t, looped = false) {
+  getSplineGradient(_t, looped = false) {
     let p0, p1, p2, p3;
 
     if (!looped) {
-      p1 = parseInt(t) + 1;
+      p1 = parseInt(_t) + 1;
       p2 = p1 + 1;
       p3 = p2 + 1;
       p0 = p1 - 1;
     } else {
-      p1 = parseInt(t);
+      p1 = parseInt(_t);
       p2 = (p1 + 1) % this.points.length;
       p3 = (p2 + 1) % this.points.length;
       p0 = p1 >= 1 ? p1 - 1 : this.points.length - 1;
     }
 
-    t = t - parseInt(t);
-
+    const t = parseFloat(_t) - parseInt(_t);
     const tt = parseFloat(t * t);
     const ttt = parseFloat(tt * t);
 
@@ -98,7 +96,7 @@ class Spline {
     const q3 = parseFloat(-9.0 * tt + 8.0 * t + 1.0);
     const q4 = parseFloat(3.0 * tt - 2.0 * t);
 
-    const tx = parseFloat(
+    const x = parseFloat(
       0.5 *
         (this.points[p0].x * q1 +
           this.points[p1].x * q2 +
@@ -106,7 +104,7 @@ class Spline {
           this.points[p3].x * q4)
     );
 
-    const ty = parseFloat(
+    const y = parseFloat(
       0.5 *
         (this.points[p0].y * q1 +
           this.points[p1].y * q2 +
@@ -114,7 +112,7 @@ class Spline {
           this.points[p3].y * q4)
     );
 
-    return { tx, ty };
+    return { x, y };
   }
 
   update() {}
