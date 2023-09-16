@@ -95,15 +95,15 @@ class Game {
       this.refresh = true;
     }
 
-    if (this.path.marker >= parseFloat(this.path.points.length)) {
-      this.path.marker -= parseFloat(this.path.points.length);
-      this.refresh = true;
-    }
+    // if (this.marker >= parseFloat(this.path.points.length)) {
+    //   this.marker -= parseFloat(this.path.points.length);
+    //   this.refresh = true;
+    // }
 
-    if (this.path.marker < parseFloat(0.0)) {
-      this.path.marker += parseFloat(this.path.points.length);
-      this.refresh = true;
-    }
+    // if (this.marker < parseFloat(0.0)) {
+    //   this.marker += parseFloat(this.path.points.length);
+    //   this.refresh = true;
+    // }
   }
 
   draw() {
@@ -115,7 +115,7 @@ class Game {
       const points = parseFloat(this.path.points.length);
       for (let t = 0.0; t < points; t += 0.005) {
         const { x, y } = this.path.getSplinePoint(parseFloat(t), true);
-        this.canvas.drawPixel({ x, y, color: 'white' });
+        this.canvas.drawPixel({ x, y, color });
       }
 
       // Draw control-points
@@ -123,7 +123,10 @@ class Game {
       // Draw active control-point
       this.path.drawPoint();
       // Draw agent
+      //this.path.drawAgent();
+
       const p1 = this.path.getSplinePoint(parseFloat(this.path.marker), true);
+
       const g1 = this.path.getSplineGradient(
         parseFloat(this.path.marker),
         true

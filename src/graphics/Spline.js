@@ -4,10 +4,10 @@ class Spline {
     this.context = props.context;
     this.points = props.points || [];
     this.selectedPoint = 0;
-    this.controlPointSize = 10;
+    this.marker = 0.0;
+    this.controlPointSize = 6;
     this.controlPointColorDefault = '#f00';
     this.controlPointColorSelected = '#ff0';
-    this.marker = 0.0;
   }
 
   setSelectedPoint(dir) {
