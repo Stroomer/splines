@@ -1,7 +1,7 @@
 import Canvas from './Canvas.js';
 import Loop from './Loop.js';
 import Spline from '../graphics/Spline.js';
-import Point2D from '../graphics/Point2D.js';
+import Vertex from '../graphics/Vertex.js';
 import KeyboardInput from '../structure/KeyboardInput.js';
 import {
   KEY_DOWN,
@@ -22,23 +22,25 @@ class Game {
       width: 320,
       height: 180,
       bgcolor: '#000',
+      showPosition: true,
     });
 
-    this.path = new Spline({
-      points: [
-        new Point2D({ x: 10, y: 41 }),
-        new Point2D({ x: 30, y: 41 }),
-        new Point2D({ x: 50, y: 41 }),
-        new Point2D({ x: 70, y: 41 }),
-        new Point2D({ x: 90, y: 41 }),
-        new Point2D({ x: 110, y: 41 }),
-        new Point2D({ x: 130, y: 41 }),
-        new Point2D({ x: 150, y: 41 }),
-        new Point2D({ x: 170, y: 41 }),
-        new Point2D({ x: 190, y: 41 }),
+    this.spline = new Spline({
+      vertices: [
+        new Vertex({ x: 10, y: 41 }),
+        new Vertex({ x: 30, y: 41 }),
+        new Vertex({ x: 50, y: 41 }),
+        new Vertex({ x: 70, y: 41 }),
+        new Vertex({ x: 90, y: 41 }),
+        new Vertex({ x: 110, y: 41 }),
+        new Vertex({ x: 130, y: 41 }),
+        new Vertex({ x: 150, y: 41 }),
+        new Vertex({ x: 170, y: 41 }),
+        new Vertex({ x: 190, y: 41 }),
       ],
       canvas: this.canvas,
       context: this.canvas.context,
+      game: this,
     });
 
     this.refresh = true;
@@ -56,54 +58,48 @@ class Game {
 
   update(dt) {
     if (this.keyboardInput.isReleased(KEY_X)) {
-      this.path.setSelectedPoint(1);
-      this.refresh = true;
+      this.spline.toggleVertex(1);
     }
 
     if (this.keyboardInput.isReleased(KEY_Z)) {
-      this.path.setSelectedPoint(-1);
-      this.refresh = true;
+      this.spline.toggleVertex(-1);
     }
 
     if (this.keyboardInput.isPressed(KEY_LEFT)) {
-      this.path.points[this.path.selectedPoint].x -= 30.0 * dt;
-      this.refresh = true;
+      this.spline.moveVertex(-1, 0, dt);
     }
 
     if (this.keyboardInput.isPressed(KEY_RIGHT)) {
-      this.path.points[this.path.selectedPoint].x += 30.0 * dt;
-      this.refresh = true;
+      this.spline.moveVertex(1, 0, dt);
     }
 
     if (this.keyboardInput.isPressed(KEY_UP)) {
-      this.path.points[this.path.selectedPoint].y -= 30.0 * dt;
-      this.refresh = true;
+      this.spline.moveVertex(0, -1, dt);
     }
 
     if (this.keyboardInput.isPressed(KEY_DOWN)) {
-      this.path.points[this.path.selectedPoint].y += 30.0 * dt;
-      this.refresh = true;
+      this.spline.moveVertex(0, 1, dt);
     }
 
     if (this.keyboardInput.isPressed(KEY_A)) {
-      this.path.marker -= 5.0 * dt;
+      this.spline.marker -= 5.0 * dt;
       this.refresh = true;
     }
 
     if (this.keyboardInput.isPressed(KEY_S)) {
-      this.path.marker += 5.0 * dt;
+      this.spline.marker += 5.0 * dt;
       this.refresh = true;
     }
 
-    // if (this.marker >= parseFloat(this.path.points.length)) {
-    //   this.marker -= parseFloat(this.path.points.length);
-    //   this.refresh = true;
-    // }
+    if (this.marker >= parseFloat(this.spline.vertices.length)) {
+      this.marker -= parseFloat(this.spline.vertices.length);
+      this.refresh = true;
+    }
 
-    // if (this.marker < parseFloat(0.0)) {
-    //   this.marker += parseFloat(this.path.points.length);
-    //   this.refresh = true;
-    // }
+    if (this.marker < parseFloat(0.0)) {
+      this.marker += parseFloat(this.spline.vertices.length);
+      this.refresh = true;
+    }
   }
 
   draw() {
@@ -112,23 +108,24 @@ class Game {
 
       // Draw spline
       const color = 'white';
-      const points = parseFloat(this.path.points.length);
-      for (let t = 0.0; t < points; t += 0.005) {
-        const { x, y } = this.path.getSplinePoint(parseFloat(t), true);
+      const vertices = parseFloat(this.spline.vertices.length);
+      for (let t = 0.0; t < vertices; t += 0.005) {
+        const { x, y } = this.spline.getSplinePoint(parseFloat(t), true);
         this.canvas.drawPixel({ x, y, color });
       }
 
-      // Draw control-points
-      this.path.drawPoints();
+      // Draw control-vertices
+      this.spline.drawVertices();
       // Draw active control-point
-      this.path.drawPoint();
+      this.spline.drawPoint();
       // Draw agent
-      //this.path.drawAgent();
+      const p1 = this.spline.getSplinePoint(
+        parseFloat(this.spline.marker),
+        true
+      );
 
-      const p1 = this.path.getSplinePoint(parseFloat(this.path.marker), true);
-
-      const g1 = this.path.getSplineGradient(
-        parseFloat(this.path.marker),
+      const g1 = this.spline.getSplineGradient(
+        parseFloat(this.spline.marker),
         true
       );
 

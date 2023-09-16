@@ -1,32 +1,34 @@
 class Spline {
   constructor(props) {
+    this.game = props.game;
     this.canvas = props.canvas;
     this.context = props.context;
-    this.points = props.points || [];
-    this.selectedPoint = 0;
+    this.vertices = props.vertices || [];
+    this.selected = 0;
     this.marker = 0.0;
-    this.controlPointSize = 6;
+
+    this.controlverticesize = 6;
     this.controlPointColorDefault = '#f00';
     this.controlPointColorSelected = '#ff0';
+
+    this.velocity = 30.0;
   }
 
-  setSelectedPoint(dir) {
-    switch (dir) {
-      case 1:
-        this.selectedPoint++;
-        if (this.selectedPoint > this.points.length - 1) {
-          this.selectedPoint = 0;
-        }
-        break;
-      case -1:
-        this.selectedPoint--;
-        if (this.selectedPoint < 0) {
-          this.selectedPoint = this.points.length - 1;
-        }
-        break;
-      default:
-        throw new Error('Invalid parameter');
+  toggleVertex(dir) {
+    if (dir === 1) {
+      this.selected =
+        this.selected + 1 > this.vertices.length - 1 ? 0 : this.selected + 1;
+    } else if (dir === -1) {
+      this.selected =
+        this.selected - 1 < 0 ? this.vertices.length - 1 : this.selected - 1;
     }
+    this.game.refresh = true;
+  }
+
+  moveVertex(dirX, dirY, dt) {
+    this.vertices[this.selected].x += dirX * (this.velocity * dt);
+    this.vertices[this.selected].y += dirY * (this.velocity * dt);
+    this.game.refresh = true;
   }
 
   getSplinePoint(_t, looped = false) {
@@ -39,9 +41,9 @@ class Spline {
       p0 = p1 - 1;
     } else {
       p1 = parseInt(_t);
-      p2 = (p1 + 1) % this.points.length;
-      p3 = (p2 + 1) % this.points.length;
-      p0 = p1 >= 1 ? p1 - 1 : this.points.length - 1;
+      p2 = (p1 + 1) % this.vertices.length;
+      p3 = (p2 + 1) % this.vertices.length;
+      p0 = p1 >= 1 ? p1 - 1 : this.vertices.length - 1;
     }
 
     const t = parseFloat(_t) - parseInt(_t);
@@ -55,18 +57,18 @@ class Spline {
 
     const x = parseFloat(
       0.5 *
-        (this.points[p0].x * q1 +
-          this.points[p1].x * q2 +
-          this.points[p2].x * q3 +
-          this.points[p3].x * q4)
+        (this.vertices[p0].x * q1 +
+          this.vertices[p1].x * q2 +
+          this.vertices[p2].x * q3 +
+          this.vertices[p3].x * q4)
     );
 
     const y = parseFloat(
       0.5 *
-        (this.points[p0].y * q1 +
-          this.points[p1].y * q2 +
-          this.points[p2].y * q3 +
-          this.points[p3].y * q4)
+        (this.vertices[p0].y * q1 +
+          this.vertices[p1].y * q2 +
+          this.vertices[p2].y * q3 +
+          this.vertices[p3].y * q4)
     );
 
     return { x, y };
@@ -82,9 +84,9 @@ class Spline {
       p0 = p1 - 1;
     } else {
       p1 = parseInt(_t);
-      p2 = (p1 + 1) % this.points.length;
-      p3 = (p2 + 1) % this.points.length;
-      p0 = p1 >= 1 ? p1 - 1 : this.points.length - 1;
+      p2 = (p1 + 1) % this.vertices.length;
+      p3 = (p2 + 1) % this.vertices.length;
+      p0 = p1 >= 1 ? p1 - 1 : this.vertices.length - 1;
     }
 
     const t = parseFloat(_t) - parseInt(_t);
@@ -98,18 +100,18 @@ class Spline {
 
     const x = parseFloat(
       0.5 *
-        (this.points[p0].x * q1 +
-          this.points[p1].x * q2 +
-          this.points[p2].x * q3 +
-          this.points[p3].x * q4)
+        (this.vertices[p0].x * q1 +
+          this.vertices[p1].x * q2 +
+          this.vertices[p2].x * q3 +
+          this.vertices[p3].x * q4)
     );
 
     const y = parseFloat(
       0.5 *
-        (this.points[p0].y * q1 +
-          this.points[p1].y * q2 +
-          this.points[p2].y * q3 +
-          this.points[p3].y * q4)
+        (this.vertices[p0].y * q1 +
+          this.vertices[p1].y * q2 +
+          this.vertices[p2].y * q3 +
+          this.vertices[p3].y * q4)
     );
 
     return { x, y };
@@ -117,13 +119,13 @@ class Spline {
 
   update() {}
 
-  drawPoints() {
-    const count = this.points.length;
-    const width = this.controlPointSize;
-    const height = this.controlPointSize;
+  drawVertices() {
+    const count = this.vertices.length;
+    const width = this.controlverticesize;
+    const height = this.controlverticesize;
     const color = this.controlPointColorDefault;
     for (let i = 0; i < count; i++) {
-      const { x, y } = this.points[i];
+      const { x, y } = this.vertices[i];
       this.drawPoint({ x, y, width, height, color });
     }
   }
@@ -131,10 +133,10 @@ class Spline {
   drawPoint(props = null) {
     if (props === null) {
       props = {
-        x: this.points[this.selectedPoint].x,
-        y: this.points[this.selectedPoint].y,
-        width: this.controlPointSize,
-        height: this.controlPointSize,
+        x: this.vertices[this.selected].x,
+        y: this.vertices[this.selected].y,
+        width: this.controlverticesize,
+        height: this.controlverticesize,
         color: this.controlPointColorSelected,
       };
     }
