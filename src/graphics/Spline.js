@@ -17,7 +17,7 @@ class Spline {
     this.canvas = props.canvas;
     this.context = props.context;
     this.vertices = props.vertices || [];
-    this.selected = 0;
+    this.storage = props.storage;
 
     this.knot = {
       color: '#f00',
@@ -27,7 +27,8 @@ class Spline {
       height: 6,
       velocity: 30.0,
     };
-    this.marker = { position: 0.0, velocity: 5.0, size: 15.0 };
+
+    this.marker = { position: 0.0, velocity: 0.2, size: 15.0 };
   }
 
   toggleVertex(dir) {
@@ -55,17 +56,24 @@ class Spline {
   moveMarker(dir, dt) {
     this.marker.position += dir * (this.marker.velocity * dt);
 
+    console.log(`${dir} pos: ${this.marker.position}`);
+
     if (this.marker.position >= this.vertices.length) {
       console.log(this.marker.position);
-      this.marker.position = parseFloat(
-        this.marker.position - this.vertices.length
-      );
+
+      // this.marker.position = parseFloat(
+      //   this.marker.position - this.vertices.length
+      // );
+
+      this.marker.position -= this.vertices.length;
     } else if (this.marker.position < 0.0) {
       console.log(this.marker.position);
-      //this.marker.position += this.vertices.length;
-      this.marker.position = parseFloat(
-        this.marker.position + this.vertices.length
-      );
+
+      // this.marker.position = parseFloat(
+      //   this.marker.position + this.vertices.length
+      // );
+
+      this.marker.position += this.vertices.length;
     }
 
     // TODO: fix this, gaat niet goed, tekenprobleem? lijkt alsof agent weer terug wordt gezet naar begin positie!!!????
@@ -190,6 +198,15 @@ class Spline {
 
     if (this.keyboard.isPressed(KEY_S)) {
       this.moveMarker(1, dt);
+    }
+
+    if (
+      this.keyboard.isReleased(KEY_LEFT) ||
+      this.keyboard.isReleased(KEY_RIGHT) ||
+      this.keyboard.isReleased(KEY_UP) ||
+      this.keyboard.isReleased(KEY_DOWN)
+    ) {
+      this.storage.save(this.vertices);
     }
   }
 
