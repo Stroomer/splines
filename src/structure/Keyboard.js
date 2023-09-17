@@ -9,7 +9,7 @@ import {
   KEY_S,
 } from '../helpers/consts';
 
-class KeyboardInput {
+class Keyboard {
   constructor() {
     this.keys = {
       ArrowDown: KEY_DOWN,
@@ -74,4 +74,4 @@ class KeyboardInput {
   }
 }
 
-export default KeyboardInput;
+export default Keyboard;
