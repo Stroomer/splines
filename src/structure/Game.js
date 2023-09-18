@@ -3,6 +3,7 @@ import Loop from './Loop.js';
 import Spline from '../graphics/Spline.js';
 import Keyboard from '../structure/Keyboard.js';
 import Storage from '../structure/Storage.js';
+import Text from '../graphics/Text.js';
 
 class Game {
   constructor() {
@@ -14,6 +15,15 @@ class Game {
       showPosition: true,
     });
 
+    this.fontData = [
+      ['  ##  ', ' #  # ', ' #  # ', ' #### ', ' #  # ', ' #  # ', '      '],
+    ];
+
+    this.txt = new Text(this.canvas.canvas, this.fontData);
+
+    // // Render text to the canvas
+    this.txt.renderText('Hello, World!', 10, 10, 2, 'white');
+
     this.refresh = true;
     this.keyboard = new Keyboard();
     this.storage = new Storage();
@@ -23,6 +33,7 @@ class Game {
       context: this.canvas.context,
       keyboard: this.keyboard,
       storage: this.storage,
+      showMarkerPosition: true,
       game: this,
     });
 

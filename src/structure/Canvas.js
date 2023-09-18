@@ -53,6 +53,13 @@ class Canvas {
     this.context.lineTo(x2 | 0, y2 | 0);
     this.context.stroke();
   }
+
+  drawText(props) {
+    const { x, y, color, value } = props;
+    this.context.font = '16px Arial';
+    this.context.fillStyle = color;
+    this.context.fillText(value, x, y);
+  }
 }
 
 export default Canvas;
