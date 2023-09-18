@@ -15,9 +15,7 @@ class Game {
       showPosition: true,
     });
 
-    this.fontData = [
-      ['  ##  ', ' #  # ', ' #  # ', ' #### ', ' #  # ', ' #  # ', '      '],
-    ];
+    this.fontData = [[``]];
 
     this.txt = new Text(this.canvas.canvas, this.fontData);
 
