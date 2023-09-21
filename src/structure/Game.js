@@ -4,23 +4,26 @@ import Spline from '../graphics/Spline.js';
 import Keyboard from '../structure/Keyboard.js';
 import Storage from '../structure/Storage.js';
 import Text from '../graphics/Text.js';
+import Font from '../graphics/Font.js';
 
 class Game {
   constructor() {
     this.canvas = new Canvas({
       parent: document.getElementById('app'),
+      id: 'game',
       width: 320,
       height: 180,
       bgcolor: '#000',
-      showPosition: true,
     });
 
-    this.fontData = [[``]];
+    this.font = new Font();
 
-    this.txt = new Text(this.canvas.canvas, this.fontData);
-
-    // // Render text to the canvas
-    this.txt.renderText('Hello, World!', 10, 10, 2, 'white');
+    // this.markerPosText = new Text({
+    //   x: 10,
+    //   y: 10,
+    //   canvas: this.canvas,
+    //   context: this.canvas.context,
+    // });
 
     this.refresh = true;
     this.keyboard = new Keyboard();
@@ -55,6 +58,30 @@ class Game {
       this.canvas.clear();
       // Draw spline
       this.spline.draw();
+
+      // Draw marker position
+      //this.markerPosText.draw();
+
+      //const characters = Font.getCharacters(); // Get'em all!
+      const character = Font.getCharacter('A');
+
+      const color = 'red';
+
+      const startX = 148;
+      const startY = 170;
+
+      for (let y = 0; y < character.length; y++) {
+        for (let x = 0; x < character[y].length; x++) {
+          if (Boolean(character[y][x])) {
+            this.canvas.drawPixel({
+              x: startX + x,
+              y: startY + y,
+              color: color,
+            });
+          }
+        }
+      }
+
       // Draw of this frame is complete
       this.refresh = false;
     }

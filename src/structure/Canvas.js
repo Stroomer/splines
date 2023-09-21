@@ -5,14 +5,21 @@ class Canvas {
 
   create(props) {
     this.canvas = document.createElement('canvas');
-    this.canvas.width = props.width || 100;
-    this.canvas.height = props.height || 100;
-    this.canvas.style.backgroundColor = props.bgcolor || '#fff';
+    this.canvas.id = props.id;
+    this.canvas.width = props.width;
+    this.canvas.height = props.height;
     this.width = props.width;
     this.height = props.height;
     this.context = this.canvas.getContext('2d');
     this.context.imageSmoothingEnabled = false;
-    props.parent.appendChild(this.canvas);
+
+    if (props.bgcolor) {
+      this.canvas.style.backgroundColor = props.bgcolor;
+    }
+
+    if (props.parent) {
+      props.parent.appendChild(this.canvas);
+    }
   }
 
   clear() {
@@ -54,12 +61,12 @@ class Canvas {
     this.context.stroke();
   }
 
-  drawText(props) {
-    const { x, y, color, value } = props;
-    this.context.font = '16px Arial';
-    this.context.fillStyle = color;
-    this.context.fillText(value, x, y);
-  }
+  // drawText(props) {
+  //   const { x, y, color, value } = props;
+  //   this.context.font = '16px Arial';
+  //   this.context.fillStyle = color;
+  //   this.context.fillText(value, x, y);
+  // }
 }
 
 export default Canvas;
