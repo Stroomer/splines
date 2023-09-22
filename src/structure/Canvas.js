@@ -12,14 +12,9 @@ class Canvas {
     this.height = props.height;
     this.context = this.canvas.getContext('2d');
     this.context.imageSmoothingEnabled = false;
+    this.canvas.style.backgroundColor = props.bgcolor ? props.bgcolor : null;
 
-    if (props.bgcolor) {
-      this.canvas.style.backgroundColor = props.bgcolor;
-    }
-
-    if (props.parent) {
-      props.parent.appendChild(this.canvas);
-    }
+    props.parent?.appendChild(this.canvas);
   }
 
   clear() {
@@ -54,7 +49,7 @@ class Canvas {
   drawLine(props) {
     const { x1, y1, x2, y2, color } = props;
     this.context.strokeStyle = color;
-    this.context.lineWidth = 5;
+    this.context.lineWidth = 10;
     this.context.beginPath();
     this.context.moveTo(x1 | 0, y1 | 0);
     this.context.lineTo(x2 | 0, y2 | 0);

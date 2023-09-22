@@ -237,6 +237,8 @@ class Spline {
     const x2 = -size * Math.sin(r) + p1.x;
     const y2 = -size * Math.cos(r) + p1.y;
 
+    //console.log(x1, y1, x2, y2);
+
     this.canvas.drawLine({ x1, y1, x2, y2, color: 'purple' });
   }
 }

@@ -63,24 +63,6 @@ class Game {
       //this.markerPosText.draw();
 
       //const characters = Font.getCharacters(); // Get'em all!
-      const character = Font.getCharacter('A');
-
-      const color = 'red';
-
-      const startX = 148;
-      const startY = 170;
-
-      for (let y = 0; y < character.length; y++) {
-        for (let x = 0; x < character[y].length; x++) {
-          if (Boolean(character[y][x])) {
-            this.canvas.drawPixel({
-              x: startX + x,
-              y: startY + y,
-              color: color,
-            });
-          }
-        }
-      }
 
       // Draw of this frame is complete
       this.refresh = false;

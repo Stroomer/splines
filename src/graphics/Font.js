@@ -16,14 +16,31 @@ class Font {
 
   static getImages(data) {
     const canvases = [];
+    const temp = new Canvas({ width: 32, height: 32 });
     // Loop through all characters
     for (let c = 0; c < data.length; c++) {
       const char = data[c];
+      // Create a canvas for each character
       const canvas = new Canvas({
+        parent: document.getElementById('app'),
         width: char[0].length * 4,
         height: char.length * 4,
+        bgcolor: 'black',
       });
+      // Draw character on canvas
+      for (let y = 0; y < char.length; y++) {
+        for (let x = 0; x < char[y].length; x++) {
+          if (Boolean(char[y][x])) {
+            temp.drawPixel({ x, y, color: 'white' });
+          }
+        }
+      }
+      const cv = canvas.canvas;
+      const w = cv.width;
+      const h = cv.height;
+      canvas.context.drawImage(temp.canvas, 0, 0, w, h, 0, 0, w * 4, h * 4);
       canvases.push(canvas);
+      temp.clear();
     }
     return canvases;
   }
